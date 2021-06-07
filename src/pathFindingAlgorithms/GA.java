@@ -12,13 +12,13 @@ public class GA extends PathFindingAlgorithm {
 	
 	
 	private final int POP_NUM = 100;
-	private final int ITER_MAX = 200;
+	private final int ITER_MAX = 100;
 	private final double SELECTION_RATE = 0.3;
 	private final double MUTATION_RATE = 0.005;
 	private final float MAX_POINT = 100.0f;
 
 
-	private int minStep;
+	private int step;
 	private int cont = 1;
 	
 	ArrayList<Individual> population = new ArrayList<Individual>();
@@ -33,9 +33,9 @@ public class GA extends PathFindingAlgorithm {
         super();
     }
 	
-	public void executeGA(int minStep) {
+	public void executeGA(int step) {
 
-        this.minStep = minStep;
+        this.step = step;
         init();
         //int cont = 1; // continue flag
         for (int i = 0; i < ITER_MAX; i++) {
@@ -70,7 +70,7 @@ public class GA extends PathFindingAlgorithm {
 	public void init() {
 		population.clear();
 		for (int i = 0; i < POP_NUM; i++) {
-			population.add(new Individual(minStep));
+			population.add(new Individual(step));
 			population.get(i).randomInit();
 //			for (int j = 0; j < minStep; j++)
 //				System.out.print(population.get(i).genes[j] + " ");
@@ -99,12 +99,12 @@ public class GA extends PathFindingAlgorithm {
 				ind2 = (int) (rand.nextDouble() * SELECTION_RATE * POP_NUM); // update ind2 if ind1==ind2
 			} while (ind2 == ind1);
 
-			int crossoverPoint = rand.nextInt(minStep) + 1;
+			int crossoverPoint = rand.nextInt(step) + 1;
 
-			population.add(new Individual(minStep));
-			population.add(new Individual(minStep));
+			population.add(new Individual(step));
+			population.add(new Individual(step));
 
-			for (int j = 0; j < minStep; j++) {
+			for (int j = 0; j < step; j++) {
 				if (j < crossoverPoint) {
 					population.get(2 * k).genes[j] = selectedInd.get(ind1).genes[j];
 					population.get(2 * k + 1).genes[j] = selectedInd.get(ind2).genes[j];
@@ -121,7 +121,7 @@ public class GA extends PathFindingAlgorithm {
 		int dir;
 
 		for (int i = 0; i < POP_NUM; i++) {
-			for (int j = 0; j < minStep; j++) {
+			for (int j = 0; j < step; j++) {
 				if (rand.nextFloat() < MUTATION_RATE) {
 					dir = rand.nextInt(4);
 					population.get(i).genes[j] = dir;
@@ -229,9 +229,6 @@ public class GA extends PathFindingAlgorithm {
         	return 0;
         }
         
-        
-        int step = 0;
-        
     	for (int j = 0; j < i; j++) {
     		System.out.print(best.genes[j] + " ");
     	}
@@ -261,9 +258,8 @@ public class GA extends PathFindingAlgorithm {
         	j++;
         }
         path.add(target);System.out.println(target.getX() + "," +target.getY());
-        step = j + 1;
 	    
-        System.out.println(step);
+        System.out.println(j + 1);
         return step;
     }
 
